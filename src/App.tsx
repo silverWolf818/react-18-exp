@@ -4,6 +4,7 @@ import useField from './Formagic/useField.ts'
 // import useWatch from './Formagic/useWatch.tsx'
 import useFormState from './Formagic/useFormState.tsx'
 import { Button, Form, Input, Radio, Checkbox } from 'antd'
+import {create} from "zustand";
 
 const InputControl = ({ name, validate }: { name: string; validate?: any }) => {
   const { value, onChange } = useField({ name, validate })
@@ -81,48 +82,57 @@ const StateChange = () => {
   )
 }
 
-function App() {
-  const form = useForm({
-    mode: 'onChange',
-    defaultValues: {
-      username: 'zzh',
-      email: '123123@qq.com',
-      scene: '1',
-      field: ['TextField', 'RadioButton'],
-    },
-  })
+const useStore = create((set) => ({
+  bears: 0,
+  increasePopulation: () => set((state) => ({ bears: state.bears + 1 })),
+  removeAllBears: () => set({ bears: 0 }),
+}))
 
-  const onFinish = () => {
-    alert(JSON.stringify(form.control._formValues))
-  }
+function App() {
+  // const form = useForm({
+  //   mode: 'onChange',
+  //   defaultValues: {
+  //     username: 'zzh',
+  //     email: '123123@qq.com',
+  //     scene: '1',
+  //     field: ['TextField', 'RadioButton'],
+  //   },
+  // })
+  //
+  // const onFinish = () => {
+  //   alert(JSON.stringify(form.control._formValues))
+  // }
+  const bears = useStore((state) => state.bears)
+  console.log(bears);
 
   return (
-    <FormProvider value={{ ...form }}>
-      <div style={{ margin: '100px auto', maxWidth: 600 }}>
-        <Form onFinish={onFinish} labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
-          <Form.Item label="Username" name="username">
-            <InputControl name={'username'} />
-          </Form.Item>
-          <Form.Item label="Email" name="email">
-            <InputControl name={'email'} />
-          </Form.Item>
-          <Form.Item label="Scene" name="scene">
-            <RadioControl name={'scene'} />
-          </Form.Item>
-          <Form.Item label="Field" name="field">
-            <CheckboxControl name={'field'} />
-          </Form.Item>
-          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-            <Button type="primary" htmlType="submit">
-              Submit
-            </Button>
-          </Form.Item>
-          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-            <StateChange />
-          </Form.Item>
-        </Form>
-      </div>
-    </FormProvider>
+      <div>1</div>
+    // <FormProvider value={{ ...form }}>
+    //   <div style={{ margin: '100px auto', maxWidth: 600 }}>
+    //     <Form onFinish={onFinish} labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
+    //       <Form.Item label="Username" name="username">
+    //         <InputControl name={'username'} />
+    //       </Form.Item>
+    //       <Form.Item label="Email" name="email">
+    //         <InputControl name={'email'} />
+    //       </Form.Item>
+    //       <Form.Item label="Scene" name="scene">
+    //         <RadioControl name={'scene'} />
+    //       </Form.Item>
+    //       <Form.Item label="Field" name="field">
+    //         <CheckboxControl name={'field'} />
+    //       </Form.Item>
+    //       <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+    //         <Button type="primary" htmlType="submit">
+    //           Submit
+    //         </Button>
+    //       </Form.Item>
+    //       <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+    //         <StateChange />
+    //       </Form.Item>
+    //     </Form>
+    //   </div>
+    // </FormProvider>
   )
 }
 
